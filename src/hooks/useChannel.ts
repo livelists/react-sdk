@@ -1,10 +1,30 @@
-import { useState } from 'react';
+import {
+    useState,
+    useEffect,
+    useRef,
+    useCallback,
+} from 'react';
 
-import { IChannelArgs } from '../types/channel.types';
+import { Channel } from 'livelists-js-core';
 
-//:TODO move react hooks to separate library
-export function useChannel (args:IChannelArgs) {
+import { IChannelArgs, IChannel } from '../types/channel.types';
+
+export function useChannel (args:IChannelArgs):IChannel {
     const [socketId, setSocketId] = useState('helloWorldId');
+    const channelRef = useRef<Channel>();
 
-    return 'id';
-};
+    useEffect(()  => {
+        channelRef.current = new Channel();
+    }, []);
+
+    const join = useCallback(() => {
+        channelRef.current?.join();
+    }, []);
+
+    return {
+        messages: [],
+        join,
+        subscribe: () => {},
+    };
+}
+
