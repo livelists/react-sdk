@@ -6,7 +6,6 @@ import {
 } from 'react';
 
 import { Channel } from 'livelists-js-core';
-
 import { IChannelArgs, IChannel } from '../types/channel.types';
 
 export function useChannel (args:IChannelArgs):IChannel {
@@ -18,7 +17,10 @@ export function useChannel (args:IChannelArgs):IChannel {
     }, []);
 
     const join = useCallback(() => {
-        channelRef.current?.join();
+        channelRef.current?.join({
+            url: args.url,
+            channelId: args.channelId,
+        });
     }, []);
 
     return {
