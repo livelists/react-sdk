@@ -4,7 +4,8 @@
   "description": "LiveLists components for React.js",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "link-local-libs": "npm link livelists-js-core & webpack"
   },
   "repository": {
     "type": "git",
