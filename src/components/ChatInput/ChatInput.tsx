@@ -15,7 +15,7 @@ const ChatInput:React.FC<IProps> = ({ onChange, placeholder }) => {
                 placeholder='Message...'
             />
             <Button>
-                Send
+                Bebra
             </Button>
         </div>
     )
