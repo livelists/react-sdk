@@ -1,24 +1,30 @@
-import React, { useState, ChangeEvent } from 'react';
-import styles from './ChatInput.module.css';
+import React, { useState } from 'react';
+
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';
+import styles from './ChatInput.module.css';
 
 interface IProps {
-    onChange?: ({ value }:{ value: string }) => void,
+    onSubmit?: ({ value }:{ value: string|undefined }) => void,
     placeholder?: string,
 }
 
-const ChatInput:React.FC<IProps> = ({ onChange, placeholder }) => {
+const ChatInput:React.FC<IProps> = ({ onSubmit, placeholder }) => {
+    const [formValue, setValue] = useState<string>();
+
     return (
         <div className={styles.cont}>
             <Input
-                placeholder='Message...'
+                placeholder={placeholder}
+                onChange={({ value }) => setValue(value)}
             />
-            <Button>
-                Bebra
+            <Button
+                onClick={onSubmit ? () => onSubmit({ value: formValue }) : undefined}
+            >
+                Submit
             </Button>
         </div>
-    )
+    );
 };
 
 export default React.memo(ChatInput);
