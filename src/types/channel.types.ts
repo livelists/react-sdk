@@ -8,6 +8,7 @@ export interface IChannel {
 export interface IChannelArgs {
     url: string,
     channelId: string,
+    accessToken: string,
 }
 
 export interface IPublishMessageArgs {
