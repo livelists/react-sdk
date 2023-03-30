@@ -25,6 +25,7 @@ export function useChannel (channelArgs:IChannelArgs):IChannel {
         channelRef.current?.join({
             url: channelArgs.url,
             channelId: channelArgs.channelId,
+            accessToken: channelArgs.accessToken,
         });
     }, []);
 
