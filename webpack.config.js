@@ -14,7 +14,10 @@ module.exports = {
         extensions: ['.ts', '.tsx']
     },
     externals: {
-        react: 'react'
+        react: 'react',
+        protobufjs: 'protobufjs',
+        'protobufjs/minimal': 'protobufjs',
+        events: 'events',
     },
     module: {
         rules: [
