@@ -1,30 +1,37 @@
 import {
-    useState,
+    useCallback,
     useEffect,
     useRef,
-    useCallback,
+    useState,
 } from 'react';
 
-import { Channel } from 'livelists-js-core';
-
 import {
-    IChannelArgs,
-    IChannel,
-    IPublishMessageArgs,
-} from '../types/channel.types';
+    Channel,
+    ChannelEvents,
+    Message,
+} from 'livelists-js-core';
+
+import { IChannel, IChannelArgs, IPublishMessageArgs, } from '../types/channel.types';
 
 export function useChannel (channelArgs:IChannelArgs):IChannel {
-    const [socketId, setSocketId] = useState('helloWorldId');
     const channelRef = useRef<Channel>();
+    const [recentMessages, setRecentMessages] = useState<Message[]>([]);
 
     useEffect(()  => {
         channelRef.current = new Channel();
+
+        channelRef.current?.on({
+            event: ChannelEvents.RecentMessagesUpdated,
+            cb: ({ messages }) => {
+                console.log('on new message', messages);
+                setRecentMessages(messages);
+            }
+        });
     }, []);
 
     const join = useCallback(() => {
         channelRef.current?.join({
             url: channelArgs.url,
-            channelId: channelArgs.channelId,
             accessToken: channelArgs.accessToken,
         });
     }, []);
@@ -40,5 +47,6 @@ export function useChannel (channelArgs:IChannelArgs):IChannel {
         join,
         subscribe: () => {},
         publishMessage,
+        recentMessages,
     };
 }

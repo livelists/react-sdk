@@ -1,13 +1,15 @@
+import { Message } from 'livelists-js-core';
+
 export interface IChannel {
     messages: any[],
     join: () => void,
     subscribe: () => void,
     publishMessage: (args:IPublishMessageArgs) => void,
+    recentMessages: Message[],
 }
 
 export interface IChannelArgs {
     url: string,
-    channelId: string,
     accessToken: string,
 }
 
