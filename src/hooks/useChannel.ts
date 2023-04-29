@@ -2,37 +2,65 @@ import {
     useCallback,
     useEffect,
     useRef,
-    useState,
+    useState
 } from 'react';
 
 import {
     Channel,
     ChannelEvents,
-    Message,
+    ConnectionState,
+    ConnectionStates,
+    IConnectionStateUpdated, IHistoryMessagesUpdated,
+    IOnEvent,
+    IRecentMessagesUpdated,
+    LocalMessage
 } from 'livelists-js-core';
 
-import { IChannel, IChannelArgs, IPublishMessageArgs, } from '../types/channel.types';
+import { IChannel, IChannelArgs, IPublishMessageArgs } from '../types/channel.types';
 
-export function useChannel (channelArgs:IChannelArgs):IChannel {
+const DEFAULT_PAGE_SIZE = 50;
+
+export function useChannel ({
+    url,
+    accessToken,
+    initialPageSize = DEFAULT_PAGE_SIZE,
+    initialOffset = 0,
+}:IChannelArgs):IChannel {
     const channelRef = useRef<Channel>();
-    const [recentMessages, setRecentMessages] = useState<Message[]>([]);
+    const [recentMessages, setRecentMessages] = useState<LocalMessage[]>([]);
+    const [historyMessages, setHistoryMessages] = useState<LocalMessage[]>([]);
+    const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionStates.Disconnected);
 
     useEffect(()  => {
-        channelRef.current = new Channel();
+        channelRef.current = new Channel({
+            initialPageSize,
+            initialOffset,
+        });
 
         channelRef.current?.on({
             event: ChannelEvents.RecentMessagesUpdated,
             cb: ({ messages }) => {
-                console.log('on new message', messages);
                 setRecentMessages(messages);
             }
-        });
+        } as IOnEvent<ChannelEvents.RecentMessagesUpdated, IRecentMessagesUpdated['data']>);
+        channelRef.current?.on({
+            event: ChannelEvents.ConnectionStateUpdated,
+            cb: ({ connectionState:s }) => {
+                setConnectionState(s);
+            }
+        } as IOnEvent<ChannelEvents.ConnectionStateUpdated, IConnectionStateUpdated['data']>);
+        channelRef.current?.on({
+            event: ChannelEvents.HistoryMessagesUpdated,
+            cb: ({ messages }) => {
+                setHistoryMessages(messages);
+            }
+        } as IOnEvent<ChannelEvents.HistoryMessagesUpdated, IHistoryMessagesUpdated['data']>);
     }, []);
 
     const join = useCallback(() => {
         channelRef.current?.join({
-            url: channelArgs.url,
-            accessToken: channelArgs.accessToken,
+            url,
+            accessToken,
         });
     }, []);
 
@@ -48,5 +76,7 @@ export function useChannel (channelArgs:IChannelArgs):IChannel {
         subscribe: () => {},
         publishMessage,
         recentMessages,
+        connectionState,
+        historyMessages,
     };
 }

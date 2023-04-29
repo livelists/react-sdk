@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Message } from 'livelists-js-core';
+import { LocalMessage } from 'livelists-js-core';
 
 import { cnb } from '../../../utils/helpers/cnb';
 import { ChatMessage } from '../../ChatMessage';
@@ -8,7 +8,7 @@ import styles from './RecentMessages.module.css';
 
 interface IProps {
     className?: string,
-    messages: Message[],
+    messages: LocalMessage[],
 }
 
 const RecentMessages:React.FC<IProps> = ({
@@ -20,8 +20,8 @@ const RecentMessages:React.FC<IProps> = ({
         <div className={cnb(styles.cont, className)}>
             {messages?.map((m) =>(
                 <ChatMessage
-                    key={m.id}
-                    message={m}
+                    key={m.message.message.id}
+                    localMessage={m}
                 />
             ))}
         </div>
