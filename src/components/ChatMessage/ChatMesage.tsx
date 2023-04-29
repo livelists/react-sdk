@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Message } from 'livelists-js-core';
+import { LocalMessage } from 'livelists-js-core';
 
 import { Text } from '../../atoms/Text';
 import { cnb } from '../../utils/helpers/cnb';
@@ -8,21 +8,27 @@ import styles from './ChatMessage.module.css';
 
 interface IProps {
     className?: string,
-    message: Message,
+    localMessage: LocalMessage,
 }
 
 const ChatMessage:React.FC<IProps> = ({
     className,
-    message,
+    localMessage,
 }) => {
+    const {
+        message: {
+            text,
+            createdAt,
+        }
+    } = localMessage.message;
 
     return (
         <div className={cnb(styles.cont, className)}>
             <Text>
-                {message.text}
+                {text}
             </Text>
             <Text>
-                {message.createdAt?.getTime()}
+                {createdAt?.getTime()}
             </Text>
         </div>
     );
