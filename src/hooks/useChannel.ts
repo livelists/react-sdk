@@ -1,20 +1,18 @@
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
     Channel,
     ChannelEvents,
     ConnectionState,
     ConnectionStates,
-    IConnectionStateUpdated, IHistoryMessagesUpdated,
+    IConnectionStateUpdated,
+    IHistoryMessagesUpdated,
     IOnEvent,
     IRecentMessagesUpdated,
     LocalMessage
 } from 'livelists-js-core';
+import { IIsLoadingMoreUpdated } from 'livelists-js-core/dist/services/channel/const/EmittedEvents';
+import { ILoadMoreMessagesArgs } from 'livelists-js-core/dist/types/channel.types';
 
 import { IChannel, IChannelArgs, IPublishMessageArgs } from '../types/channel.types';
 
@@ -30,6 +28,7 @@ export function useChannel ({
     const [recentMessages, setRecentMessages] = useState<LocalMessage[]>([]);
     const [historyMessages, setHistoryMessages] = useState<LocalMessage[]>([]);
     const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionStates.Disconnected);
+    const [isLoadingHistory, setIsLoadingMore] = useState<boolean>(false);
 
     useEffect(()  => {
         channelRef.current = new Channel({
@@ -55,6 +54,12 @@ export function useChannel ({
                 setHistoryMessages(messages);
             }
         } as IOnEvent<ChannelEvents.HistoryMessagesUpdated, IHistoryMessagesUpdated['data']>);
+        channelRef.current?.on({
+            event: ChannelEvents.IsLoadingMoreUpdated,
+            cb: ({ isLoadingMore }) => {
+                setIsLoadingMore(isLoadingMore);
+            }
+        } as IOnEvent<ChannelEvents.IsLoadingMoreUpdated, IIsLoadingMoreUpdated['data']>);
     }, []);
 
     const join = useCallback(() => {
@@ -67,7 +72,12 @@ export function useChannel ({
     const publishMessage = useCallback((args:IPublishMessageArgs) => {
         channelRef.current?.publishMessage({
             text: args.text,
+            customData: args.customData,
         });
+    }, []);
+
+    const loadMoreMessages = useCallback((args:ILoadMoreMessagesArgs) => {
+        channelRef.current?.loadMoreMessages(args);
     }, []);
 
     return {
@@ -78,5 +88,7 @@ export function useChannel ({
         recentMessages,
         connectionState,
         historyMessages,
+        isLoadingHistory,
+        loadMoreMessages,
     };
 }
