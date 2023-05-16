@@ -24,6 +24,7 @@ import {
     disableSelectStyle,
     disableSelectStyleReset
 } from './styles';
+import { IOnScrollFrame } from './types';
 import { setCSS } from './utils/domCss';
 import { getInnerHeight } from './utils/getInnerHeight';
 import { getInnerWidth } from './utils/getInnerWidth';
@@ -31,7 +32,7 @@ import { getScrollbarWidth } from './utils/getScrollbarWidth';
 
 interface IProps {
     onScroll?: Function,
-    onScrollFrame?: Function,
+    onScrollFrame?: (args:IOnScrollFrame) => void,
     onScrollStart?: Function,
     onScrollStop?: Function,
     onUpdate?: Function,
