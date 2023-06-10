@@ -9,12 +9,13 @@ import {
     IHistoryMessagesUpdated,
     IOnEvent,
     IRecentMessagesUpdated,
-    LocalMessage
+    LocalMessage,
+    IIsLoadingMoreUpdated,
+    ILoadMoreMessagesArgs,
 } from 'livelists-js-core';
-import { IIsLoadingMoreUpdated } from 'livelists-js-core/dist/services/channel/const/EmittedEvents';
-import { ILoadMoreMessagesArgs } from 'livelists-js-core/dist/types/channel.types';
 
 import { IChannel, IChannelArgs, IPublishMessageArgs } from '../types/channel.types';
+import { useParticipants } from './useParticipants';
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -62,6 +63,14 @@ export function useChannel ({
         } as IOnEvent<ChannelEvents.IsLoadingMoreUpdated, IIsLoadingMoreUpdated['data']>);
     }, []);
 
+    const {
+        loadParticipants,
+        isParticipantsLoaded,
+        participants,
+    } = useParticipants({
+        channelRef,
+    });
+
     const join = useCallback(() => {
         channelRef.current?.join({
             url,
@@ -80,6 +89,7 @@ export function useChannel ({
         channelRef.current?.loadMoreMessages(args);
     }, []);
 
+
     return {
         messages: [],
         join,
@@ -90,5 +100,8 @@ export function useChannel ({
         historyMessages,
         isLoadingHistory,
         loadMoreMessages,
+        loadParticipants,
+        isParticipantsLoaded,
+        participants,
     };
 }

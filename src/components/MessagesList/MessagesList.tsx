@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 
-import { ILoadMoreMessagesArgs } from 'livelists-js-core/dist/types/channel.types';
+import { ILoadMoreMessagesArgs } from 'livelists-js-core';
 
 import { ScrollBar } from '../../atoms/ScrollBar';
 import { IOnScrollFrame } from '../../atoms/ScrollBar/types';
