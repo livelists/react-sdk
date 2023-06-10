@@ -11,18 +11,6 @@
     justify-content: flex-end;
 }
 
-.avatar {
-    width: 44px;
-    height: 44px;
-    background: #4052ee;
-    color: white;
-    border-radius: 30px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .messageCloud {
     border-radius: 5px 13px 13px 13px;
     background: white;
@@ -75,9 +63,4 @@
 
 .message.myMessage {
     align-items: flex-end;
-}
-
-.avatarText {
-    color: white;
-    font-size: 20px;
 }

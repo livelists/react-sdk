@@ -2,7 +2,7 @@
 
 npm run link-local-libs
 
-rm -rf "/home/nikrainev/Desktop/mychat/web-client/node_modules/livelists-js-core/dist"
-rm -rf "/home/nikrainev/Desktop/mychat/web-client/node_modules/livelists-react-sdk/dist"
-cp -R "/home/nikrainev/Desktop/livelists/client-js-core/dist" "/home/nikrainev/Desktop/mychat/web-client/node_modules/livelists-js-core/dist"
-cp -R "./dist" "/home/nikrainev/Desktop/mychat/web-client/node_modules/livelists-react-sdk/dist"
+rm -rf "/Users/nikitakrainev/Desktop/LiveLists/mychat/web-client/node_modules/livelists-js-core/dist"
+rm -rf "/Users/nikitakrainev/Desktop/LiveLists/mychat/web-client/node_modules/livelists-react-sdk/dist"
+cp -R "/Users/nikitakrainev/Desktop/LiveLists/Client/client-js-core/dist" "/Users/nikitakrainev/Desktop/LiveLists/mychat/web-client/node_modules/livelists-js-core/dist"
+cp -R "./dist" "/Users/nikitakrainev/Desktop/LiveLists/mychat/web-client/node_modules/livelists-react-sdk/dist"

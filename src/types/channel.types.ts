@@ -1,7 +1,12 @@
-import { LocalMessage, ConnectionState, CustomData } from 'livelists-js-core';
-import { ILoadMoreMessagesArgs } from "livelists-js-core/dist/types/channel.types";
+import {
+    LocalMessage,
+    ConnectionState,
+    CustomData,
+    ILoadMoreMessagesArgs,
+} from 'livelists-js-core';
+import { IParticipants } from './participants.types';
 
-export interface IChannel {
+export interface IChannel extends IParticipants {
     messages: any[],
     join: () => void,
     subscribe: () => void,

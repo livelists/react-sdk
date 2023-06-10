@@ -14,18 +14,20 @@ interface IProps {
 const ChatInput:React.FC<IProps> = ({ onSubmit, placeholder }) => {
     const [formValue, setValue] = useState<string>();
 
-    const onClickButton = () => {
-        if (onSubmit) {
+    const handleSubmit = () => {
+        if (onSubmit && formValue) {
             onSubmit({ value: formValue });
         }
+    };
+
+    const onClickButton = () => {
+        handleSubmit();
         setValue('');
     };
 
     const onKeyDown = (args:React.KeyboardEvent<HTMLInputElement>) => {
         if (args.key === 'Enter' || args.keyCode === ENTER_CHAR_CODE) {
-            if (onSubmit) {
-                onSubmit({ value: formValue });
-            }
+            handleSubmit();
             setValue('');
         }
     };

@@ -4,6 +4,7 @@ import { LocalMessage } from 'livelists-js-core';
 
 import { Text } from '../../atoms/Text';
 import { cnb } from '../../utils/helpers/cnb';
+import { Avatar } from '../Avatar';
 import styles from './ChatMessage.module.css';
 
 interface IProps {
@@ -31,11 +32,9 @@ const ChatMessage:React.FC<IProps> = ({
             [styles.isMy]: isMy,
         })}>
             {!isMy && (
-                <div className={styles.avatar}>
-                    <Text className={styles.avatarText}>
-                        {sender?.identifier?.[0]}
-                    </Text>
-                </div>
+                <Avatar
+                    identifier={sender?.identifier?.[0]}
+                />
             )}
             <div className={cnb(styles.message, {
                 [styles.myMessage]: isMy,
