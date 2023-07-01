@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import {
     Channel,
@@ -15,6 +20,7 @@ import {
 } from 'livelists-js-core';
 
 import { IChannel, IChannelArgs, IPublishMessageArgs } from '../types/channel.types';
+import { useCustomEvents } from './useCustomEvents';
 import { useParticipants } from './useParticipants';
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -71,6 +77,14 @@ export function useChannel ({
         channelRef,
     });
 
+    const {
+        onSubscribeEvent,
+        unSubscribeEvent,
+        publishEvent,
+    } = useCustomEvents({
+        channelRef,
+    });
+
     const join = useCallback(() => {
         channelRef.current?.join({
             url,
@@ -103,5 +117,9 @@ export function useChannel ({
         loadParticipants,
         isParticipantsLoaded,
         participants,
+        onSubscribeEvent,
+        unSubscribeEvent,
+        publishEvent,
+        channelIdentifier: channelRef.current?.channelId,
     };
 }

@@ -12,7 +12,6 @@ interface IProps {
 const ParticipantItem:React.FC<IProps> = ({
     participant,
 }) => {
-    console.log(participant);
     return (
         <div className={styles.cont}>
             <div className={styles.avatarCont}>

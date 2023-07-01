@@ -1,6 +1,6 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
-import { ILoadMoreMessagesArgs, ParticipantShortInfo } from 'livelists-js-core';
+import { ParticipantShortInfo } from 'livelists-js-core';
 
 import { ScrollBar } from '../../atoms/ScrollBar';
 import { ParticipantItem } from './ParticipantItem';
