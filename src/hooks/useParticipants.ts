@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+
 import {
     IOnEvent,
     IParticipantsLoaded,
@@ -23,14 +24,12 @@ export const useParticipants = ({
     ] = useState<ParticipantShortInfo[]>([]);
 
     const loadParticipants = useCallback(() => {
-        console.log(channelRef.current?.channelParticipants);
         channelRef.current?.channelParticipants?.loadParticipants();
     }, []);
 
     channelRef.current?.channelParticipants?.on({
         event: ChannelParticipantsEvents.ParticipantsListLoaded,
         cb: ({ isLoaded }) => {
-            console.log('isLoaded', isLoaded);
             setIsParticipantsLoaded(isLoaded);
         }
     } as IOnEvent<ChannelParticipantsEvents.ParticipantsListLoaded, IParticipantsLoaded['data']>);
@@ -38,7 +37,7 @@ export const useParticipants = ({
     channelRef.current?.channelParticipants?.on({
         event: ChannelParticipantsEvents.ParticipantsListUpdated,
         cb: ({ participants }) => {
-            setParticipantsList(participants);
+            setParticipantsList([...participants]);
         }
     } as IOnEvent<ChannelParticipantsEvents.ParticipantsListUpdated, IParticipantsUpdated['data']>);
 
