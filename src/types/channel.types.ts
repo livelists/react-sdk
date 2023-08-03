@@ -1,8 +1,12 @@
+import React from 'react';
+
 import {
     LocalMessage,
     ConnectionState,
     CustomData,
-    ILoadMoreMessagesArgs, CustomEvent,
+    ILoadMoreMessagesArgs,
+    CustomEvent,
+    WSConnector,
 } from 'livelists-js-core';
 
 import { ISubscribeArgs } from './customEvents.types';
@@ -25,8 +29,7 @@ export interface IChannel extends IParticipants {
 }
 
 export interface IChannelArgs {
-    url: string,
-    accessToken: string,
+    wsConnector: WSConnector,
     initialPageSize?: number,
     initialOffset?: number,
 }
