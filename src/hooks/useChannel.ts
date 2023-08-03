@@ -25,12 +25,11 @@ import { useParticipants } from './useParticipants';
 
 const DEFAULT_PAGE_SIZE = 50;
 
-export function useChannel ({
-    url,
-    accessToken,
+export const useChannel = ({
+    wsConnector,
     initialPageSize = DEFAULT_PAGE_SIZE,
     initialOffset = 0,
-}:IChannelArgs):IChannel {
+}:IChannelArgs):IChannel => {
     const channelRef = useRef<Channel>();
     const [recentMessages, setRecentMessages] = useState<LocalMessage[]>([]);
     const [historyMessages, setHistoryMessages] = useState<LocalMessage[]>([]);
@@ -38,7 +37,11 @@ export function useChannel ({
     const [isLoadingHistory, setIsLoadingMore] = useState<boolean>(false);
 
     useEffect(()  => {
+        if (!wsConnector) {
+            return;
+        }
         channelRef.current = new Channel({
+            socket: wsConnector,
             initialPageSize,
             initialOffset,
         });
@@ -67,7 +70,7 @@ export function useChannel ({
                 setIsLoadingMore(isLoadingMore);
             }
         } as IOnEvent<ChannelEvents.IsLoadingMoreUpdated, IIsLoadingMoreUpdated['data']>);
-    }, []);
+    }, [wsConnector]);
 
     const {
         loadParticipants,
@@ -86,10 +89,7 @@ export function useChannel ({
     });
 
     const join = useCallback(() => {
-        channelRef.current?.join({
-            url,
-            accessToken,
-        });
+        channelRef.current?.join();
     }, []);
 
     const publishMessage = useCallback((args:IPublishMessageArgs) => {
@@ -122,4 +122,4 @@ export function useChannel ({
         publishEvent,
         channelIdentifier: channelRef.current?.channelId,
     };
-}
+};
