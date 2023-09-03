@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 import {
     IOnEvent,
@@ -11,6 +11,7 @@ import {
 import { IParticipants, IParticipantsArgs } from '../types/participants.types';
 
 export const useParticipants = ({
+    channel,
     channelRef,
 }:IParticipantsArgs):IParticipants => {
     const [
@@ -27,19 +28,24 @@ export const useParticipants = ({
         channelRef.current?.channelParticipants?.loadParticipants();
     }, []);
 
-    channelRef.current?.channelParticipants?.on({
-        event: ChannelParticipantsEvents.ParticipantsListLoaded,
-        cb: ({ isLoaded }) => {
-            setIsParticipantsLoaded(isLoaded);
+    useEffect(() => {
+        if (!channel) {
+            return;
         }
-    } as IOnEvent<ChannelParticipantsEvents.ParticipantsListLoaded, IParticipantsLoaded['data']>);
+        channel.channelParticipants?.on({
+            event: ChannelParticipantsEvents.ParticipantsListLoaded,
+            cb: ({ isLoaded }) => {
+                setIsParticipantsLoaded(isLoaded);
+            }
+        } as IOnEvent<ChannelParticipantsEvents.ParticipantsListLoaded, IParticipantsLoaded['data']>);
 
-    channelRef.current?.channelParticipants?.on({
-        event: ChannelParticipantsEvents.ParticipantsListUpdated,
-        cb: ({ participants }) => {
-            setParticipantsList([...participants]);
-        }
-    } as IOnEvent<ChannelParticipantsEvents.ParticipantsListUpdated, IParticipantsUpdated['data']>);
+        channel.channelParticipants?.on({
+            event: ChannelParticipantsEvents.ParticipantsListUpdated,
+            cb: ({ participants }) => {
+                setParticipantsList([...participants]);
+            }
+        } as IOnEvent<ChannelParticipantsEvents.ParticipantsListUpdated, IParticipantsUpdated['data']>);
+    }, [channel]);
 
     return {
         participants: participantsList,

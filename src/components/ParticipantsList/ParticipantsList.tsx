@@ -4,7 +4,6 @@ import { ParticipantShortInfo } from 'livelists-js-core';
 
 import { ScrollBar } from '../../atoms/ScrollBar';
 import { ParticipantItem } from './ParticipantItem';
-import styles from './ParticipantsList.module.css';
 
 interface IProps {
     className?: string,

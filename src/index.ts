@@ -7,6 +7,7 @@ import { RecentMessages } from './components/MessagesList/RecentMessages';
 import { ParticipantsList } from './components/ParticipantsList';
 import { useChannel } from './hooks/useChannel';
 import { useChannelsAggregation } from './hooks/useChannelsAggregation';
+import { useShortChannel } from './hooks/useShortChannel';
 import { useWsConnection } from './hooks/useWsConnection';
 
 export {
@@ -20,4 +21,5 @@ export {
     ChannelsList,
     ChannelItem,
     useChannelsAggregation,
+    useShortChannel,
 };

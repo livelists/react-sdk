@@ -1,30 +1,53 @@
-import React from 'react';
+/** @jsx jsx */
+import React, {
+    useCallback,
+    useEffect,
+    useState,
+} from 'react';
 
-import { ChannelWithMsg } from 'livelists-js-core';
+import { css, jsx } from '@emotion/react';
+import { LocalShortChannel } from 'livelists-js-core';
 
 import { ScrollBar } from '../../atoms/ScrollBar';
 import { ChannelItem } from './Channelltem';
-import styles from './ChannelsList.module.css';
 
 interface IProps {
-    channels: ChannelWithMsg[],
+    channels: LocalShortChannel[],
+    onSelect?: ({ channelId }:{ channelId: string }) => void,
 }
 
 const ChannelsList:React.FC<IProps> = ({
     channels,
+    onSelect,
 }) => {
+    const [selectedChannelId, setSelectedChannelId] = useState<string|undefined>(undefined);
+
+    useEffect(() => {
+        if (selectedChannelId && onSelect) {
+            onSelect({ channelId: selectedChannelId });
+        }
+    }, [selectedChannelId]);
+
+    const onItemClick = useCallback(({ channelId }:{ channelId: string }) => {
+        setSelectedChannelId(channelId);
+    }, []);
 
     return (
-        <div className={styles.cont}>
+        <div css={css`
+          width: 100%;
+        `}
+        >
             <ScrollBar
                 style={{
                     height: 'calc(100vh - 67px)'
                 }}
             >
-                {channels.map((c:ChannelWithMsg) => (
+                {channels.map((c:LocalShortChannel) => (
                     <ChannelItem
-                        key={c?.channel?.id}
+                        onClick={onItemClick}
+                        key={c.channel.channel?.id}
                         channel={c}
+                        isSelected={selectedChannelId === c?.channel?.channel?.identifier}
                     />
                 ))}
             </ScrollBar>

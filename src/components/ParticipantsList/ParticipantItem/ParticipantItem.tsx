@@ -1,35 +1,68 @@
+/** @jsx jsx */
 import React from 'react';
 
+import { css, jsx } from '@emotion/react';
 import { ParticipantShortInfo } from 'livelists-js-core';
 
 import { Text } from '../../../atoms/Text';
+import { getDayTime } from '../../../utils/date/getDayTime';
 import { Avatar } from '../../Avatar';
-import styles from './Participantitem.module.css';
+
 interface IProps {
     participant: ParticipantShortInfo,
 }
+
+const cont = css`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 20px;
+`;
+
+const avatarCont = css`
+  width: 60px;
+  flex-shrink: 0;
+`;
+
+const textCont = css`
+  width: 100%;
+  flex-shrink: 1;
+`;
+
+const participantUsername = `
+  font-weight: 600;
+`;
+
+const onlineStatusText = `
+  color: #959595;
+`;
+
 
 const ParticipantItem:React.FC<IProps> = ({
     participant,
 }) => {
     return (
-        <div className={styles.cont}>
-            <div className={styles.avatarCont}>
+
+        <div css={cont}>
+            <div css={avatarCont}>
                 <Avatar
+                    bigSize
                     identifier={participant.identifier}
                 />
             </div>
-            <div className={styles.textCont}>
+            <div css={textCont}>
                 {participant?.customData?.data?.username && (
-                    <Text className={styles.participantUsername}>
+                    <Text customCss={participantUsername}>
                         {participant.customData.data.username}
                     </Text>
                 )}
-                <Text className={styles.onlineStatusText}>
+                <Text customCss={onlineStatusText}>
                     {participant.isOnline ? (
                         'Online'
                     ) : (
-                        `${participant.lastSeenAt?.getHours()}:${participant.lastSeenAt?.getMinutes()}`
+                        participant.lastSeenAt ? getDayTime({
+                            date: participant.lastSeenAt
+                        }) : null
                     )}
                 </Text>
             </div>

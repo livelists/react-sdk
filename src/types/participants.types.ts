@@ -5,7 +5,8 @@ import {
 } from 'livelists-js-core';
 
 export interface IParticipantsArgs {
-    channelRef: React.MutableRefObject<Channel | undefined>
+    channel: Channel | undefined,
+    channelRef: React.MutableRefObject<Channel | undefined>,
 }
 
 export interface IParticipants {

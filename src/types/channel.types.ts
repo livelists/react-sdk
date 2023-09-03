@@ -25,13 +25,14 @@ export interface IChannel extends IParticipants {
     loadMoreMessages: (args:ILoadMoreMessagesArgs) => void,
     onSubscribeEvent: (args:ISubscribeArgs) => void,
     unSubscribeEvent: (args:ISubscribeArgs) => void,
-    channelIdentifier: string | undefined,
+    scrollToBottomKey: number,
 }
 
 export interface IChannelArgs {
     wsConnector: WSConnector,
     initialPageSize?: number,
     initialOffset?: number,
+    channelId: string,
 }
 
 export interface IPublishMessageArgs {
