@@ -17,6 +17,7 @@ import {
     LocalMessage,
     IIsLoadingMoreUpdated,
     ILoadMoreMessagesArgs,
+    IShouldScrollToBottom,
 } from 'livelists-js-core';
 
 import { IChannel, IChannelArgs, IPublishMessageArgs } from '../types/channel.types';
@@ -29,12 +30,15 @@ export const useChannel = ({
     wsConnector,
     initialPageSize = DEFAULT_PAGE_SIZE,
     initialOffset = 0,
+    channelId,
 }:IChannelArgs):IChannel => {
     const channelRef = useRef<Channel>();
+    const [channel, setChannel] = useState<Channel>();
     const [recentMessages, setRecentMessages] = useState<LocalMessage[]>([]);
     const [historyMessages, setHistoryMessages] = useState<LocalMessage[]>([]);
     const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionStates.Disconnected);
     const [isLoadingHistory, setIsLoadingMore] = useState<boolean>(false);
+    const [scrollToBottomKey, setScrollToBottomKey] = useState<number>(0);
 
     useEffect(()  => {
         if (!wsConnector) {
@@ -44,7 +48,10 @@ export const useChannel = ({
             socket: wsConnector,
             initialPageSize,
             initialOffset,
+            channelId,
         });
+
+        setChannel(channelRef.current);
 
         channelRef.current?.on({
             event: ChannelEvents.RecentMessagesUpdated,
@@ -70,6 +77,12 @@ export const useChannel = ({
                 setIsLoadingMore(isLoadingMore);
             }
         } as IOnEvent<ChannelEvents.IsLoadingMoreUpdated, IIsLoadingMoreUpdated['data']>);
+        channelRef.current?.on({
+            event: ChannelEvents.ShouldScrollToBottom,
+            cb: () => {
+                setScrollToBottomKey(c => c + 1);
+            }
+        } as IOnEvent<ChannelEvents.ShouldScrollToBottom, IShouldScrollToBottom['data']>);
     }, [wsConnector]);
 
     const {
@@ -77,6 +90,7 @@ export const useChannel = ({
         isParticipantsLoaded,
         participants,
     } = useParticipants({
+        channel,
         channelRef,
     });
 
@@ -85,6 +99,7 @@ export const useChannel = ({
         unSubscribeEvent,
         publishEvent,
     } = useCustomEvents({
+        channel,
         channelRef,
     });
 
@@ -120,6 +135,6 @@ export const useChannel = ({
         onSubscribeEvent,
         unSubscribeEvent,
         publishEvent,
-        channelIdentifier: channelRef.current?.channelId,
+        scrollToBottomKey,
     };
 };

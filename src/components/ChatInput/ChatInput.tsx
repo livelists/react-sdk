@@ -1,10 +1,51 @@
+/** @jsx jsx */
 import React, { useState } from 'react';
+
+import { css, jsx } from '@emotion/react';
 
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';
-import styles from './ChatInput.module.css';
 
 const ENTER_CHAR_CODE = 13;
+
+const cont = css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+    height: 67px;
+    padding: 0 30px;
+    box-shadow: 0 0 5px #dcdcdc;
+`;
+
+const input = `
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    padding: 0 10px;
+    border: none;
+`;
+
+const sendButton = `
+    width: 44px;
+    height: 44px;
+    background: rgb(114,76,233);
+    background: linear-gradient(153deg, rgba(114,76,233,1) 48%, rgba(64,82,238,1) 100%);
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+`;
+
+const sendIcon = css`
+    fill: white;
+    transition: .3s ease-in-out transform;
+`;
+
 
 interface IProps {
     onSubmit?: ({ value }:{ value: string|undefined }) => void,
@@ -33,9 +74,9 @@ const ChatInput:React.FC<IProps> = ({ onSubmit, placeholder }) => {
     };
 
     return (
-        <div className={styles.cont}>
+        <div css={cont}>
             <Input
-                className={styles.input}
+                customCss={input}
                 value={formValue}
                 placeholder={placeholder}
                 onChange={({ value }) => setValue(value)}
@@ -44,14 +85,14 @@ const ChatInput:React.FC<IProps> = ({ onSubmit, placeholder }) => {
             <Button
                 disabled={!formValue}
                 onClick={onClickButton}
-                className={styles.sendButton}
+                cssCustom={sendButton}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    className={styles.sendIcon}
+                    css={sendIcon}
                 >
                     <path
                         fill="none"

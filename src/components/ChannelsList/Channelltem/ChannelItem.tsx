@@ -1,51 +1,128 @@
-import React, { useState } from 'react';
+/** @jsx jsx */
+import React from 'react';
 
-import { ChannelWithMsg } from 'livelists-js-core';
+import { css, jsx } from '@emotion/react';
+import { LocalShortChannel } from 'livelists-js-core';
 
+import { useShortChannel } from '../../../hooks/useShortChannel';
 import { getDayTime } from '../../../utils/date/getDayTime';
 import { Avatar } from '../../Avatar';
-import styles from './ChannelItem.module.css';
+
+const content = ({ isActive }:{ isActive: boolean }) => css`
+  height: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 10px;
+  background: ${isActive ? '#3390ec' : undefined}
+`;
+
+const avatarCont = css`
+  width: 60px;
+`;
+
+
+const infoCont = css`
+    width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    color: #707579;
+    flex: 1 1 auto;
+    padding: 1px 7px 1px 9px;
+`;
+
+const title= css`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const subTitle= css`
+    display: flex;
+    justify-content: space-between;
+    padding-right: 17px;
+    padding-top: 2px;
+`;
+
+const name = ({ isActive }:{ isActive: boolean }) => css`
+    color: ${isActive ? 'white' : 'black'};
+    font-weight: 500;
+    font-size: 16px;
+`;
+
+const time = ({ isActive }:{ isActive: boolean }) => css`
+    font-size: 12px;
+    line-height: 2;
+    color: ${isActive ? 'white' : 'black'}
+`;
+
+const messageText = ({ isActive }:{ isActive: boolean }) => css`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 17px;
+    display: flex;
+    justify-content: flex-start;
+    color: ${isActive ? 'white' : 'black'}
+`;
+
+const messageAuthor = ({ isActive }:{ isActive: boolean }) => css`
+    color: ${isActive ? 'white' : 'black'};
+`;
 
 interface IProps {
-    channel: ChannelWithMsg,
+    channel: LocalShortChannel,
+    isSelected: boolean,
+    onClick?: ({ channelId }:{ channelId: string }) => void,
 }
 
 const ChannelItem:React.FC<IProps> = ({
     channel,
+    isSelected,
+    onClick,
 }) => {
+    const {
+        channel: {
+            channel: channelData
+        }
+    } = useShortChannel({
+        channel,
+    });
 
     return (
         <div
-            className={styles.content}
+            onClick={onClick ? () => onClick({ channelId: channelData.channel?.identifier || '' }) : () => {}}
+            css={content({ isActive: isSelected })}
         >
-            <div className={styles.avatarCont}>
+            <div css={avatarCont}>
                 <Avatar
-                    className={styles.avatar}
-                    identifier={channel.channel?.identifier}
+                    bigSize
+                    identifier={channelData.channel?.identifier}
                 />
             </div>
-            <div className={styles.infoCont}>
-                <div className={styles.title}>
-                    <p className={styles.name}>
-                        {channel.channel?.identifier}
+            <div css={infoCont}>
+                <div css={title}>
+                    <p css={name({ isActive: isSelected })}>
+                        {channelData.channel?.identifier}
                     </p>
-                    {channel.messages?.[0]?.createdAt && (
-                        <p className={styles.time}>
+                    {channelData?.messages?.[0]?.createdAt && (
+                        <p css={time({ isActive: isSelected })}>
                             {getDayTime({
-                                date: channel.messages?.[0]?.createdAt
+                                date: channelData.messages?.[0]?.createdAt
                             })}
                         </p>
                     )}
                 </div>
-                {channel.messages?.[0] && (
-                    <div className={styles.subTitle}>
-                        <p className={styles.messageText}>
-                            {channel.messages[0].sender && (
-                                <span className={styles.messageAuthor}>
-                                    {channel.messages[0].sender?.identifier}
+                {channelData.messages?.[0] && (
+                    <div css={subTitle}>
+                        <p css={messageText({ isActive: isSelected })}>
+                            {channelData.messages[0].sender && (
+                                <span css={messageAuthor({ isActive: isSelected })}>
+                                    {channelData.messages[0].sender?.identifier}
                                 </span>
                             )}
-                            {channel.messages[0].text}
+                            {channelData.messages[0].text}
                         </p>
                     </div>
                 )}

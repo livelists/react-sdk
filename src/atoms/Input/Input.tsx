@@ -1,10 +1,14 @@
+/** @jsx jsx */
 import React, { useState, ChangeEvent } from 'react';
+
+// eslint-disable-next-line import/named
+import { jsx, css } from '@emotion/react';
 
 interface IProps {
     onChange?: ({ value }:{ value: string }) => void,
     placeholder?: string,
     value?: string,
-    className?: string,
+    customCss?: string,
     onKeyDown?: (args: React.KeyboardEvent<HTMLInputElement>) => void,
 }
 
@@ -12,7 +16,7 @@ const Input:React.FC<IProps> = ({
     onChange,
     placeholder,
     value,
-    className,
+    customCss,
     onKeyDown,
 }) => {
     const [localValue, setLocalValue] = useState<string>();
@@ -26,7 +30,7 @@ const Input:React.FC<IProps> = ({
 
     return (
         <input
-            className={className}
+            css={css`${customCss}`}
             placeholder={placeholder}
             onChange={onLocalChange}
             onKeyDown={onKeyDown}

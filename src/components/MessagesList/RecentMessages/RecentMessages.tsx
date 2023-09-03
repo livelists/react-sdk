@@ -1,10 +1,18 @@
+/** @jsx jsx */
 import React from 'react';
 
+import { css, jsx } from '@emotion/react';
 import { LocalMessage } from 'livelists-js-core';
 
-import { cnb } from '../../../utils/helpers/cnb';
 import { ChatMessage } from '../../ChatMessage';
-import styles from './RecentMessages.module.css';
+
+const cont = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 20px;
+`;
 
 interface IProps {
     className?: string,
@@ -17,7 +25,7 @@ const RecentMessages:React.FC<IProps> = ({
 }) => {
 
     return (
-        <div className={cnb(styles.cont, className)}>
+        <div className={className} css={cont}>
             {messages?.map((m) =>(
                 <ChatMessage
                     key={m.message.message.id}

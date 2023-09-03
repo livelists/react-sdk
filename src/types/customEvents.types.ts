@@ -1,8 +1,7 @@
-import React from 'react';
-
 import { Channel, CustomEvent } from 'livelists-js-core';
 
 export interface ICustomEventsArgs {
+    channel: Channel | undefined,
     channelRef: React.MutableRefObject<Channel | undefined>
 }
 

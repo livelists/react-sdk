@@ -1,23 +1,27 @@
+/** @jsx jsx */
 import React, { ReactElement } from 'react';
+
+// eslint-disable-next-line import/named
+import { jsx, css } from '@emotion/react';
 
 interface IProps {
     onClick?: () => void,
     children?: ReactElement | string,
     disabled?: boolean,
-    className?: string,
+    cssCustom?: string,
 }
 
 const Button:React.FC<IProps> = ({
     onClick,
     children,
     disabled,
-    className,
+    cssCustom,
 }) => {
     return (
         <button
             onClick={onClick}
             disabled={disabled}
-            className={className}
+            css={css`${cssCustom}`}
         >
             {children}
         </button>

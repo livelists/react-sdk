@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react';
+
 import {
     CustomEventsEmitEvents,
     IOnEvent,
@@ -9,27 +11,35 @@ import { ICustomEventsArgs, ICustomEvents, } from '../types/customEvents.types';
 import { useSubscriptions } from './common/useSubscriptions';
 
 
-export const useCustomEvents = ({ channelRef }:ICustomEventsArgs):ICustomEvents => {
+export const useCustomEvents = ({ 
+    channel,
+    channelRef,
+}:ICustomEventsArgs):ICustomEvents => {
     const {
         onSubscribe,
         unSubscribe,
         callListeners,
     } = useSubscriptions();
 
-    channelRef.current?.customEvents?.on({
-        event: CustomEventsEmitEvents.NewCustomEvent,
-        cb: (data) => {
-            callListeners({
-                event: data.eventName,
-                data,
-            });
-        },
-    } as IOnEvent<CustomEventsEmitEvents.NewCustomEvent, INewCustomEvents['data']>);
+    useEffect(() => {
+        if (!channel) {
+            return;
+        }
+        
+        channel.customEvents?.on({
+            event: CustomEventsEmitEvents.NewCustomEvent,
+            cb: (data) => {
+                callListeners({
+                    event: data.eventName,
+                    data,
+                });
+            },
+        } as IOnEvent<CustomEventsEmitEvents.NewCustomEvent, INewCustomEvents['data']>);
+    }, [channel]);
 
-
-    const publishEvent = (data:CustomEvent) => {
+    const publishEvent = useCallback((data:CustomEvent) => {
         channelRef.current?.customEvents?.sendCustomEvent(data);
-    };
+    }, []);
 
     return {
         onSubscribeEvent: onSubscribe,
