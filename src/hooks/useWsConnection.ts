@@ -27,7 +27,7 @@ export const useWsConnection = ({
             wsRef.current = channel;
             return wsRef;
         }
-    }, [accessToken]);
+    }, [accessToken, url]);
 
     return {
         onGetConnection,

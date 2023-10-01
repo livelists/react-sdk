@@ -17,10 +17,15 @@ import {
     LocalMessage,
     IIsLoadingMoreUpdated,
     ILoadMoreMessagesArgs,
-    IShouldScrollToBottom,
+    IShouldScrollToBottom, NotSeenCounterEmittedEvents, INotSeenCountUpdated,
 } from 'livelists-js-core';
 
-import { IChannel, IChannelArgs, IPublishMessageArgs } from '../types/channel.types';
+import {
+    IChannel,
+    IChannelArgs,
+    IPublishMessageArgs,
+    IReadMessageArgs,
+} from '../types/channel.types';
 import { useCustomEvents } from './useCustomEvents';
 import { useParticipants } from './useParticipants';
 
@@ -39,6 +44,8 @@ export const useChannel = ({
     const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionStates.Disconnected);
     const [isLoadingHistory, setIsLoadingMore] = useState<boolean>(false);
     const [scrollToBottomKey, setScrollToBottomKey] = useState<number>(0);
+    const [notSeenCount, setNotSeenCount, ] = useState<number>(0);
+
 
     useEffect(()  => {
         if (!wsConnector) {
@@ -83,6 +90,12 @@ export const useChannel = ({
                 setScrollToBottomKey(c => c + 1);
             }
         } as IOnEvent<ChannelEvents.ShouldScrollToBottom, IShouldScrollToBottom['data']>);
+        channelRef.current?.notSeenCounter.on({
+            event: NotSeenCounterEmittedEvents.CountUpdated,
+            cb: ({ count }) => {
+                setNotSeenCount(count);
+            }
+        } as IOnEvent<NotSeenCounterEmittedEvents.CountUpdated, INotSeenCountUpdated['data']>);
     }, [wsConnector]);
 
     const {
@@ -118,6 +131,11 @@ export const useChannel = ({
         channelRef.current?.loadMoreMessages(args);
     }, []);
 
+    const readMessage = useCallback((args:IReadMessageArgs) => {
+        channelRef.current?.notSeenCounter?.readMessage({
+            messageId: args.messageId,
+        });
+    }, []);
 
     return {
         messages: [],
@@ -136,5 +154,7 @@ export const useChannel = ({
         unSubscribeEvent,
         publishEvent,
         scrollToBottomKey,
+        readMessage,
+        notSeenCount,
     };
 };

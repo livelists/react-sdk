@@ -33,7 +33,6 @@ export const useChannelsAggregation = ({
             socket: wsConnector,
         });
 
-
         channelsAggregationRef.current?.on({
             event: ChannelsAggregationEvents.ChannelsListUpdated,
             cb: (data) => {

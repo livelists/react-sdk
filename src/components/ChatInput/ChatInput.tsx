@@ -10,13 +10,24 @@ const ENTER_CHAR_CODE = 13;
 
 const cont = css`
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
     width: 100%;
     gap: 20px;
-    height: 67px;
-    padding: 0 30px;
-    box-shadow: 0 0 5px #dcdcdc;
+    height: 100px;
+    padding-top: 7px;
+`;
+
+const inputBlock = css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 694px;
+    gap: 20px;
+    height: 56px;
+    background: white;
+    border-radius: 12px;
+    padding: 0 8px 0 10px;
 `;
 
 const input = `
@@ -25,13 +36,16 @@ const input = `
     font-size: 16px;
     padding: 0 10px;
     border: none;
+    outline: none;
+    &:focus {
+        outline: none;
+    }
 `;
 
 const sendButton = `
-    width: 44px;
-    height: 44px;
-    background: rgb(114,76,233);
-    background: linear-gradient(153deg, rgba(114,76,233,1) 48%, rgba(64,82,238,1) 100%);
+    width: 40px;
+    height: 40px;
+    background: transparent;
     flex-shrink: 0;
     border-radius: 50%;
     border: none;
@@ -75,34 +89,33 @@ const ChatInput:React.FC<IProps> = ({ onSubmit, placeholder }) => {
 
     return (
         <div css={cont}>
-            <Input
-                customCss={input}
-                value={formValue}
-                placeholder={placeholder}
-                onChange={({ value }) => setValue(value)}
-                onKeyDown={onKeyDown}
-            />
-            <Button
-                disabled={!formValue}
-                onClick={onClickButton}
-                cssCustom={sendButton}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    css={sendIcon}
+            <div css={inputBlock}>
+                <Input
+                    customCss={input}
+                    value={formValue}
+                    placeholder={placeholder}
+                    onChange={({ value }) => setValue(value)}
+                    onKeyDown={onKeyDown}
+                />
+                <Button
+                    disabled={!formValue}
+                    onClick={onClickButton}
+                    cssCustom={sendButton}
                 >
-                    <path
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
                         fill="none"
-                        d="M0 0h24v24H0V0z"
-                    />
-                    <path
-                        d="M3.4 20.4l17.45-7.48c.81-.35.81-1.49 0-1.84L3.4 3.6c-.66-.29-1.39.2-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z"
-                    />
-                </svg>
-            </Button>
+                        css={sendIcon}
+                    >
+                        <path
+                            fill="#8BABD8"
+                            d="m12.815 12.197-7.532 1.256a.5.5 0 0 0-.386.318L2.3 20.728c-.248.64.421 1.25 1.035.943l18-9a.75.75 0 0 0 0-1.342l-18-9c-.614-.307-1.283.304-1.035.943l2.598 6.957a.5.5 0 0 0 .386.319l7.532 1.255a.2.2 0 0 1 .119.326.2.2 0 0 1-.119.068h-.001Z"
+                        />
+                    </svg>
+                </Button>
+            </div>
         </div>
     );
 };

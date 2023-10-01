@@ -19,7 +19,13 @@ const cont = css`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background: #f6f8fc;
+  height: 100%;
+  width: 100%;
+`;
+
+const content = css`
+  width: 694px;
+  margin: auto;
 `;
 
 interface IProps {
@@ -101,12 +107,14 @@ const MessagesList:React.FC<IProps> = ({
         <div className={className} css={cont}>
             <ScrollBar
                 style={{
-                    height: 'calc(100vh - 67px)'
+                    height: '100%',
                 }}
                 ref={scrollRef}
                 onScrollFrame={onScrollFrame}
             >
-                {children}
+                <div css={content}>
+                    {children}
+                </div>
             </ScrollBar>
         </div>
     );

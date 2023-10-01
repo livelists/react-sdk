@@ -37,7 +37,7 @@ export function renderThumbHorizontalDefault({ style, ...props }:{
         ...style,
         cursor: 'pointer',
         borderRadius: 'inherit',
-        backgroundColor: 'rgba(0,0,0,.2)'
+        backgroundColor: 'rgba(0,0,0,.1)'
     };
     return <div style={finalStyle} {...props} />;
 }
@@ -49,7 +49,7 @@ export function renderThumbVerticalDefault({ style, ...props }:{
         ...style,
         cursor: 'pointer',
         borderRadius: 'inherit',
-        backgroundColor: 'rgba(0,0,0,.2)'
+        backgroundColor: 'rgba(0,0,0,.1)'
     };
     return <div style={finalStyle} {...props} />;
 }

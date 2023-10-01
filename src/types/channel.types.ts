@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
     LocalMessage,
     ConnectionState,
@@ -26,6 +24,8 @@ export interface IChannel extends IParticipants {
     onSubscribeEvent: (args:ISubscribeArgs) => void,
     unSubscribeEvent: (args:ISubscribeArgs) => void,
     scrollToBottomKey: number,
+    readMessage: (args:IReadMessageArgs) => void,
+    notSeenCount: number,
 }
 
 export interface IChannelArgs {
@@ -38,4 +38,8 @@ export interface IChannelArgs {
 export interface IPublishMessageArgs {
     text: string,
     customData?: CustomData,
+}
+
+export interface IReadMessageArgs {
+    messageId: string,
 }

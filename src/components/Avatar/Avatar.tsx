@@ -17,8 +17,8 @@ const Avatar:React.FC<IProps> = ({
 
     return (
         <div css={css`
-            width: ${bigSize ? '54px' : '44px'};
-            height: ${bigSize ? '54px' : '44px'};
+            width: ${bigSize ? '48px' : '40px'};
+            height: ${bigSize ? '48px' : '40px'};
             background: #4052ee;
             color: white;
             border-radius: 30px;
