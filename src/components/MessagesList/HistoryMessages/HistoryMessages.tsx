@@ -28,11 +28,12 @@ const HistoryMessages:React.FC<IProps> = ({
 
     return (
         <div className={className} css={cont}>
-            {messages?.map((m) =>(
+            {messages?.map((m, index) =>(
                 <ChatMessage
                     key={m.message.message.id}
                     readMessage={readMessage}
                     localMessage={m}
+                    prevMessageCreatedAt={messages?.[index - 1]?.message?.message?.createdAt}
                 />
             ))}
         </div>

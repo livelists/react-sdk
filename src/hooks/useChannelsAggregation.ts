@@ -36,7 +36,7 @@ export const useChannelsAggregation = ({
         channelsAggregationRef.current?.on({
             event: ChannelsAggregationEvents.ChannelsListUpdated,
             cb: (data) => {
-                setChannels(data.channels);
+                setChannels([...data.channels]);
             }
         } as IOnEvent<ChannelsAggregationEvents.ChannelsListUpdated, IChannelsListUpdated['data']>);
     }, [wsConnector]);

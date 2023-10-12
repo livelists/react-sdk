@@ -124,9 +124,11 @@ const ChannelItem:React.FC<IProps> = ({
                             )}
                             {channelData.messages[0].text}
                         </p>
-                        <UnreadCount 
-                            count={2}
-                        />
+                        {channel.unreadCount > 0 && (
+                            <UnreadCount
+                                count={channel.unreadCount}
+                            />
+                        )}
                     </div>
                 )}
             </div>
