@@ -97,56 +97,8 @@ export default class Scrollbars extends Component<IProps, IState> {
 
     private lastViewScrollTop:number = 0;
 
-    constructor({
-        onScroll,
-        onScrollFrame,
-        onScrollStart,
-        onScrollStop,
-        onUpdate,
-        renderView = renderViewDefault,
-        renderTrackHorizontal = renderTrackHorizontalDefault,
-        renderTrackVertical = renderTrackVerticalDefault,
-        renderThumbHorizontal =renderThumbHorizontalDefault,
-        renderThumbVertical = renderThumbVerticalDefault,
-        tagName = 'div',
-        thumbSize,
-        thumbMinSize = 30,
-        hideTracksWhenNotNeeded = false,
-        autoHide = false,
-        autoHideTimeout = 1000,
-        autoHideDuration = 200,
-        autoHeight = false,
-        autoHeightMin = 0,
-        autoHeightMax = 200,
-        universal =  false,
-        style,
-        children,
-    }:IProps) {
-        super({
-            onScroll,
-            onScrollFrame,
-            onScrollStart,
-            onScrollStop,
-            onUpdate,
-            renderView,
-            renderTrackHorizontal,
-            renderTrackVertical,
-            renderThumbHorizontal,
-            renderThumbVertical,
-            tagName,
-            thumbSize,
-            thumbMinSize,
-            hideTracksWhenNotNeeded,
-            autoHide,
-            autoHideTimeout,
-            autoHideDuration,
-            autoHeight,
-            autoHeightMin,
-            autoHeightMax,
-            universal,
-            style,
-            children,
-        });
+    constructor(props:IProps) {
+        super(props);
 
         this.getScrollLeft = this.getScrollLeft.bind(this);
         this.getScrollTop = this.getScrollTop.bind(this);

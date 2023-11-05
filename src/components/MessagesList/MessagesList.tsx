@@ -11,6 +11,7 @@ import { ILoadMoreMessagesArgs } from 'livelists-js-core';
 
 import { ScrollBar } from '../../atoms/ScrollBar';
 import { IOnScrollFrame } from '../../atoms/ScrollBar/types';
+import { BroadCastEvents } from '../../const/BROADCAST_EVENTS';
 
 const SCROLL_TOP_TO_LOAD_MORE = 200;
 
@@ -59,6 +60,20 @@ const MessagesList:React.FC<IProps> = ({
     };
 
     useEffect(() => {
+        const bc = new BroadcastChannel('ui_channel');
+
+        bc.onmessage = (event) => {
+            if (event.data.event === BroadCastEvents.UnreadLabel) {
+                scrollRef.current?.scrollTop(event.data.message);
+            }
+        };
+
+        return () => {
+            bc.close();
+        };
+    }, []);
+
+    useEffect(() => {
         let timeOut:NodeJS.Timeout;
         if (
             !isLoadingMore &&
@@ -72,7 +87,7 @@ const MessagesList:React.FC<IProps> = ({
                         skipFromFirstLoaded: 0,
                     });
                 }
-            }, 1000);
+            }, 100);
         }
         
         return () => {
