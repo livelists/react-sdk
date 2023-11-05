@@ -6,6 +6,7 @@ import { LocalShortChannel } from 'livelists-js-core';
 
 import { useShortChannel } from '../../../hooks/useShortChannel';
 import { getDayTime } from '../../../utils/date/getDayTime';
+import { getUserNameFromUser } from '../../../utils/string/getUserNameFromUser';
 import { Avatar } from '../../Avatar';
 import { UnreadCount } from './UnreadCount';
 
@@ -119,7 +120,7 @@ const ChannelItem:React.FC<IProps> = ({
                         <p css={messageText({ isActive: isSelected })}>
                             {channelData.messages[0].sender && (
                                 <span css={messageAuthor({ isActive: isSelected })}>
-                                    {`${channelData.messages[0].sender?.identifier}: `}
+                                    {`${getUserNameFromUser(channelData.messages[0].sender)}: `}
                                 </span>
                             )}
                             {channelData.messages[0].text}

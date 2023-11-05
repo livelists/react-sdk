@@ -7,6 +7,7 @@ import { LocalMessage, MessageType } from 'livelists-js-core';
 
 import { SystemMessageBlock } from '../../atoms/SystemMessageBlock';
 import { Text } from '../../atoms/Text';
+import { BroadCastEvents } from '../../const/BROADCAST_EVENTS';
 import { useIntersectionObserver } from '../../hooks/common/useIntersectionObserver';
 import { IReadMessageArgs } from '../../types/channel.types';
 import { getDayTime } from '../../utils/date/getDayTime';
@@ -62,7 +63,6 @@ const ChatMessage:React.FC<IProps> = ({
     prevMessageCreatedAt,
 }) => {
     const messageRef = useRef<HTMLDivElement>(null);
-    console.log(localMessage.message.localMeta.isFirstUnSeen);
 
     const {
         message: {
@@ -89,6 +89,20 @@ const ChatMessage:React.FC<IProps> = ({
             });
         }
     }, [intersection, id]);
+
+
+    useEffect(() => {
+        if (isFirstUnSeen) {
+            const bc = new BroadcastChannel('ui_channel');
+
+            setTimeout(() => {
+                bc.postMessage({
+                    event: BroadCastEvents.UnreadLabel,
+                    message: messageRef.current?.offsetTop
+                });
+            }, 100);
+        }
+    }, [isFirstUnSeen]);
 
     if (type == MessageType.System) {
         return (
