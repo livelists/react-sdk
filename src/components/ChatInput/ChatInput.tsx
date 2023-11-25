@@ -15,14 +15,15 @@ const cont = css`
     width: 100%;
     gap: 20px;
     height: 100px;
-    padding-top: 7px;
+    padding: 7px 27px 0 27px;
 `;
 
 const inputBlock = css`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 694px;
+    max-width: 694px;
+    width: 100%;
     gap: 20px;
     height: 56px;
     background: white;

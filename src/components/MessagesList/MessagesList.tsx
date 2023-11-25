@@ -22,10 +22,12 @@ const cont = css`
   justify-content: flex-start;
   height: 100%;
   width: 100%;
+  padding: 0 27px;
 `;
 
 const content = css`
-  width: 694px;
+  max-width: 694px;
+  width: 100%;
   margin: auto;
 `;
 
