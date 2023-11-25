@@ -14,7 +14,7 @@ export const useWsConnection = ({
         if (wsRef.current !== null) {
             return wsRef;
         }
-        const channel = new WSConnector();
+        const channel = new WSConnector({});
 
         try {
             await channel.openConnection({
