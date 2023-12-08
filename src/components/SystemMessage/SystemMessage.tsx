@@ -5,6 +5,7 @@ import { jsx } from '@emotion/react';
 import { LocalMessage } from 'livelists-js-core';
 
 import { SystemMessageBlock } from '../../atoms/SystemMessageBlock';
+import { getUserNameFromUser } from '../../utils/string/getUserNameFromUser';
 
 interface IProps {
     className?: string,
@@ -18,13 +19,16 @@ const SystemMessage:React.FC<IProps> = ({
     const {
         message: {
             text,
+            sender,
         },
         localMeta: {
             isMy,
-        }
+        },
     } = localMessage.message;
 
-    let messageText = `${text} joined the chat`;
+    const userText = sender ? getUserNameFromUser(sender) : text;
+
+    let messageText = `${userText} joined the chat`;
 
     if (isMy) {
         messageText = 'You joined the chat';
@@ -33,6 +37,7 @@ const SystemMessage:React.FC<IProps> = ({
 
     return (
         <SystemMessageBlock
+            isBottomMargin
             text={messageText}
         />
     );

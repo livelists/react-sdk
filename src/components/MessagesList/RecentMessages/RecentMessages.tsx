@@ -4,7 +4,6 @@ import React from 'react';
 import { css, jsx } from '@emotion/react';
 import { LocalMessage } from 'livelists-js-core';
 
-import { IReadMessageArgs } from '../../../types/channel.types';
 import { ChatMessage } from '../../ChatMessage';
 
 const cont = css`
@@ -17,20 +16,17 @@ const cont = css`
 interface IProps {
     className?: string,
     messages: LocalMessage[],
-    readMessage?: (args:IReadMessageArgs) => void,
 }
 
 const RecentMessages:React.FC<IProps> = ({
     className ,
     messages,
-    readMessage,
 }) => {
 
     return (
         <div className={className} css={cont}>
             {messages?.map((m, index) => (
                 <ChatMessage
-                    readMessage={readMessage}
                     key={m.message.message.id}
                     localMessage={m}
                     prevMessageCreatedAt={messages?.[index - 1]?.message?.message?.createdAt}

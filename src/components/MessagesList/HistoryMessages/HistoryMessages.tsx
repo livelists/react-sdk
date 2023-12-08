@@ -5,6 +5,7 @@ import { css, jsx } from '@emotion/react';
 import { LocalMessage } from 'livelists-js-core';
 
 import { IReadMessageArgs } from '../../../types/channel.types';
+import { ChannelMessageWrapper } from '../../ChannelMessageWrapper';
 import { ChatMessage } from '../../ChatMessage';
 
 const cont = css`
@@ -18,23 +19,32 @@ interface IProps {
     className?: string,
     messages: LocalMessage[],
     readMessage?: (args:IReadMessageArgs) => void,
+    onFindFirstNotSeen?: (args:{
+        offsetTop: number,
+    }) => void,
 }
 
 const HistoryMessages:React.FC<IProps> = ({
     className,
     messages,
     readMessage,
+    onFindFirstNotSeen,
 }) => {
 
     return (
         <div className={className} css={cont}>
-            {messages?.map((m, index) =>(
-                <ChatMessage
-                    key={m.message.message.id}
+            {messages?.map((m, index) => (
+                <ChannelMessageWrapper
+                    onFindFirstNotSeen={onFindFirstNotSeen}
                     readMessage={readMessage}
                     localMessage={m}
-                    prevMessageCreatedAt={messages?.[index - 1]?.message?.message?.createdAt}
-                />
+                    key={m.message.message.id}
+                >
+                    <ChatMessage
+                        localMessage={m}
+                        prevMessageCreatedAt={messages?.[index - 1]?.message?.message?.createdAt}
+                    />
+                </ChannelMessageWrapper>
             ))}
         </div>
     );

@@ -1,15 +1,12 @@
 /** @jsx jsx */
 /**  @jsxFrag */
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { css, jsx } from '@emotion/react';
 import { LocalMessage, MessageType } from 'livelists-js-core';
 
 import { SystemMessageBlock } from '../../atoms/SystemMessageBlock';
 import { Text } from '../../atoms/Text';
-import { BroadCastEvents } from '../../const/BROADCAST_EVENTS';
-import { useIntersectionObserver } from '../../hooks/common/useIntersectionObserver';
-import { IReadMessageArgs } from '../../types/channel.types';
 import { getDayTime } from '../../utils/date/getDayTime';
 import { Avatar } from '../Avatar';
 import { SystemMessage } from '../SystemMessage';
@@ -52,14 +49,12 @@ const messageCloud = ({ isMy }:{ isMy: boolean }) => css`
 interface IProps {
     className?: string,
     localMessage: LocalMessage,
-    readMessage?: (args:IReadMessageArgs) => void,
     prevMessageCreatedAt?: Date,
 }
 
 const ChatMessage:React.FC<IProps> = ({
     className,
     localMessage,
-    readMessage,
     prevMessageCreatedAt,
 }) => {
     const messageRef = useRef<HTMLDivElement>(null);
@@ -69,7 +64,6 @@ const ChatMessage:React.FC<IProps> = ({
             text,
             createdAt,
             sender,
-            id,
             type,
         },
         localMeta: {
@@ -78,31 +72,6 @@ const ChatMessage:React.FC<IProps> = ({
         }
     } = localMessage.message;
 
-    const intersection = useIntersectionObserver(messageRef, {
-        freezeOnceVisible: true,
-    });
-
-    useEffect(() => {
-        if (intersection && id && readMessage) {
-            readMessage({
-                messageId: id,
-            });
-        }
-    }, [intersection, id]);
-
-
-    useEffect(() => {
-        if (isFirstUnSeen) {
-            const bc = new BroadcastChannel('ui_channel');
-
-            setTimeout(() => {
-                bc.postMessage({
-                    event: BroadCastEvents.UnreadLabel,
-                    message: messageRef.current?.offsetTop
-                });
-            }, 100);
-        }
-    }, [isFirstUnSeen]);
 
     if (type == MessageType.System) {
         return (
@@ -110,7 +79,9 @@ const ChatMessage:React.FC<IProps> = ({
                 {isFirstUnSeen && (
                     <UnreadLabel />
                 )}
-                <SystemMessage localMessage={localMessage}/>
+                <SystemMessage
+                    localMessage={localMessage}
+                />
             </>
         );
     }
