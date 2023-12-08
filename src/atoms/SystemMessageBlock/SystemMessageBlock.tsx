@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/react';
 
 import { Text } from '../Text';
 
-const cont = css`
+const cont = ({ isBottomMargin }:{ isBottomMargin: boolean }) => css`
   width: fit-content;
   border-radius: 12px;
   background: rgba(61, 112, 184, 0.60);
@@ -16,18 +16,22 @@ const cont = css`
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  margin-top: 10px;
+  margin: 10px auto ${isBottomMargin ? '10px' : 0} auto;
 `;
 
 interface IProps {
     text: string,
+    isBottomMargin?: boolean,
 }
 
 const SystemMessageBlock:React.FC<IProps> = ({
     text,
+    isBottomMargin = false,
 }) => {
     return (
-        <div css={cont}>
+        <div css={cont({
+            isBottomMargin,
+        })}>
             <Text
                 customCss={`
                    color: white;

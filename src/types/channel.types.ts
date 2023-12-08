@@ -5,6 +5,7 @@ import {
     ILoadMoreMessagesArgs,
     CustomEvent,
     WSConnector,
+    IInitialInfoUpdated,
 } from 'livelists-js-core';
 
 import { ISubscribeArgs } from './customEvents.types';
@@ -26,6 +27,9 @@ export interface IChannel extends IParticipants {
     scrollToBottomKey: number,
     readMessage: (args:IReadMessageArgs) => void,
     notSeenCount: number,
+    initialScroll: IInitialScroll,
+    onFindFirstNotSeen: (args:IFindNotSeenArgs) => void,
+    channelInfo: IInitialInfoUpdated['data'] | undefined,
 }
 
 export interface IChannelArgs {
@@ -42,4 +46,14 @@ export interface IPublishMessageArgs {
 
 export interface IReadMessageArgs {
     messageId: string,
+}
+
+export interface IInitialScroll {
+    isFindNotSeen: boolean,
+    offsetTop: number,
+    isVisibleOnStart: boolean,
+}
+
+export interface IFindNotSeenArgs {
+    offsetTop: number,
 }

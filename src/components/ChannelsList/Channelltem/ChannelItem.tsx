@@ -6,6 +6,7 @@ import { LocalShortChannel } from 'livelists-js-core';
 
 import { useShortChannel } from '../../../hooks/useShortChannel';
 import { getDayTime } from '../../../utils/date/getDayTime';
+import { getChannelNameFromChannel } from '../../../utils/string/getChannelNameFromChannel';
 import { getUserNameFromUser } from '../../../utils/string/getUserNameFromUser';
 import { Avatar } from '../../Avatar';
 import { UnreadCount } from './UnreadCount';
@@ -91,6 +92,10 @@ const ChannelItem:React.FC<IProps> = ({
         channel,
     });
 
+    if (!channelData?.channel) {
+        return null;
+    }
+
     return (
         <div
             onClick={onClick ? () => onClick({ channelId: channelData.channel?.identifier || '' }) : () => {}}
@@ -99,13 +104,13 @@ const ChannelItem:React.FC<IProps> = ({
             <div css={avatarCont}>
                 <Avatar
                     bigSize
-                    identifier={channelData.channel?.identifier}
+                    identifier={getChannelNameFromChannel(channelData.channel)}
                 />
             </div>
             <div css={infoCont}>
                 <div css={title}>
                     <p css={name({ isActive: isSelected })}>
-                        {channelData.channel?.identifier}
+                        {getChannelNameFromChannel(channelData.channel)}
                     </p>
                     {channelData?.messages?.[0]?.createdAt && (
                         <p css={time({ isActive: isSelected })}>

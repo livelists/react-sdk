@@ -17,12 +17,17 @@ import {
     LocalMessage,
     IIsLoadingMoreUpdated,
     ILoadMoreMessagesArgs,
-    IShouldScrollToBottom, NotSeenCounterEmittedEvents, INotSeenCountUpdated,
+    IShouldScrollToBottom,
+    NotSeenCounterEmittedEvents,
+    INotSeenCountUpdated,
+    IInitialInfoUpdated,
 } from 'livelists-js-core';
 
 import {
     IChannel,
     IChannelArgs,
+    IFindNotSeenArgs,
+    IInitialScroll,
     IPublishMessageArgs,
     IReadMessageArgs,
 } from '../types/channel.types';
@@ -44,8 +49,23 @@ export const useChannel = ({
     const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionStates.Disconnected);
     const [isLoadingHistory, setIsLoadingMore] = useState<boolean>(false);
     const [scrollToBottomKey, setScrollToBottomKey] = useState<number>(0);
-    const [notSeenCount, setNotSeenCount, ] = useState<number>(0);
+    const [notSeenCount, setNotSeenCount, ] = useState<{
+        count: number,
+        isInit: boolean,
+    }>({
+        count: 0,
+        isInit: false,
+    });
 
+    const [channelInfo, setChannelInfo] = useState<IInitialInfoUpdated['data'] | undefined>(
+        undefined
+    );
+
+    const [initialScroll, setInitialScroll] = useState<IInitialScroll>({
+        isFindNotSeen: false,
+        offsetTop: 0,
+        isVisibleOnStart: false,
+    });
 
     useEffect(()  => {
         if (!wsConnector) {
@@ -85,6 +105,12 @@ export const useChannel = ({
             }
         } as IOnEvent<ChannelEvents.IsLoadingMoreUpdated, IIsLoadingMoreUpdated['data']>);
         channelRef.current?.on({
+            event: ChannelEvents.InitialInfoUpdated,
+            cb: (data) => {
+                setChannelInfo(data);
+            }
+        } as IOnEvent<ChannelEvents.InitialInfoUpdated, IInitialInfoUpdated['data']>);
+        channelRef.current?.on({
             event: ChannelEvents.ShouldScrollToBottom,
             cb: () => {
                 setScrollToBottomKey(c => c + 1);
@@ -93,7 +119,10 @@ export const useChannel = ({
         channelRef.current?.notSeenCounter.on({
             event: NotSeenCounterEmittedEvents.CountUpdated,
             cb: ({ count }) => {
-                setNotSeenCount(count);
+                setNotSeenCount({
+                    isInit: true,
+                    count: count,
+                });
             }
         } as IOnEvent<NotSeenCounterEmittedEvents.CountUpdated, INotSeenCountUpdated['data']>);
     }, [wsConnector]);
@@ -137,6 +166,25 @@ export const useChannel = ({
         });
     }, []);
 
+    const onFindFirstNotSeen = useCallback((args:IFindNotSeenArgs) => {
+        setInitialScroll((c) => ({
+            ...c,
+            isFindNotSeen: true,
+            offsetTop: args.offsetTop,
+        }));
+    }, []);
+
+
+    useEffect(() => {
+        if (notSeenCount.isInit && notSeenCount.count === 0) {
+            setInitialScroll({
+                isFindNotSeen: false,
+                offsetTop: 0,
+                isVisibleOnStart: true,
+            });
+        }
+    }, [notSeenCount]);
+
     return {
         messages: [],
         join,
@@ -155,6 +203,9 @@ export const useChannel = ({
         publishEvent,
         scrollToBottomKey,
         readMessage,
-        notSeenCount,
+        notSeenCount: notSeenCount.count,
+        initialScroll,
+        onFindFirstNotSeen,
+        channelInfo,
     };
 };

@@ -1,15 +1,15 @@
 import { ServerCustomData } from 'livelists-js-core';
 
-export const getUserNameFromUser = ({
+export const getChannelNameFromChannel = ({
     identifier,
     customData,
 }:{
     identifier: string;
     customData?: ServerCustomData | undefined;
 }):string => {
-    const customDataUserName = customData?.data?.username;
-    if (customDataUserName) {
-        return customDataUserName;
+    const customDataName = customData?.data?.channelName;
+    if (customDataName) {
+        return customDataName;
     }
 
     return identifier;

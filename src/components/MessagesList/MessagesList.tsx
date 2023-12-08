@@ -11,9 +11,10 @@ import { ILoadMoreMessagesArgs } from 'livelists-js-core';
 
 import { ScrollBar } from '../../atoms/ScrollBar';
 import { IOnScrollFrame } from '../../atoms/ScrollBar/types';
-import { BroadCastEvents } from '../../const/BROADCAST_EVENTS';
+import { IInitialScroll } from '../../types/channel.types';
 
 const SCROLL_TOP_TO_LOAD_MORE = 200;
+const NOT_SEEN_START_START_MARGIN = 200;
 
 const cont = css`
   display: flex;
@@ -25,7 +26,7 @@ const cont = css`
   padding: 0 27px;
 `;
 
-const content = css`
+const content =  css`
   max-width: 694px;
   width: 100%;
   margin: auto;
@@ -36,6 +37,7 @@ interface IProps {
     children: ReactNode | ReactNode[],
     onLoadMore?: (args:ILoadMoreMessagesArgs) =>  void,
     isLoadingMore: boolean,
+    initialScroll: IInitialScroll,
     scrollToBottomKey?: number,
 }
 
@@ -44,6 +46,7 @@ const MessagesList:React.FC<IProps> = ({
     children,
     onLoadMore,
     isLoadingMore,
+    initialScroll,
     scrollToBottomKey,
 }) => {
     const scrollRef = useRef<ScrollBar|null>(null);
@@ -61,19 +64,25 @@ const MessagesList:React.FC<IProps> = ({
         }
     };
 
+    const handleGetScrollTopToNotSeenStart = (offsetTop:number):number => {
+        const scrollHeight = scrollRef.current?.getScrollHeight();
+        const resultOffsetTop = offsetTop - NOT_SEEN_START_START_MARGIN;
+
+        if (resultOffsetTop < 0) {
+            return 0;
+        }
+        if (resultOffsetTop < scrollHeight) {
+            return resultOffsetTop;
+        }
+        return scrollHeight;
+    };
+
     useEffect(() => {
-        const bc = new BroadcastChannel('ui_channel');
-
-        bc.onmessage = (event) => {
-            if (event.data.event === BroadCastEvents.UnreadLabel) {
-                scrollRef.current?.scrollTop(event.data.message);
-            }
-        };
-
-        return () => {
-            bc.close();
-        };
-    }, []);
+        if (initialScroll.isVisibleOnStart) {
+        } else if (initialScroll.isFindNotSeen) {
+            scrollRef.current?.scrollTop(handleGetScrollTopToNotSeenStart(initialScroll.offsetTop));
+        }
+    }, [initialScroll]);
 
     useEffect(() => {
         let timeOut:NodeJS.Timeout;
