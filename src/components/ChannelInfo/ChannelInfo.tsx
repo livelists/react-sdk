@@ -86,7 +86,7 @@ const ChannelInfo:React.FC<IProps> = ({
                             count: channelInfo.participantsCount
                         })}${onlineCountWithoutMe > 1 ? (
                             `, ${channelInfo.participantsOnlineCount} online`
-                        ): null }`}
+                        ): '' }`}
                     </Text>
                 </div>
                 {children}
