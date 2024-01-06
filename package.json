@@ -1,6 +1,6 @@
 {
   "name": "livelists-react-sdk",
-  "version": "0.3.1",
+  "version": "0.3.0",
   "description": "LiveLists components for React.js",
   "main": "./dist/index.js",
   "scripts": {
