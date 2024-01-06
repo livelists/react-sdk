@@ -8,5 +8,6 @@ export interface IWsConnectionArgs {
 }
 
 export interface IWsConnection {
-    onGetConnection: () => Promise<React.RefObject<WSConnector>>
+    onGetConnection: () => Promise<React.RefObject<WSConnector>>,
+    ws: WSConnector | null
 }
