@@ -186,7 +186,6 @@ export const useChannel = ({
     }, [notSeenCount]);
 
     return {
-        messages: [],
         join,
         subscribe: () => {},
         publishMessage,

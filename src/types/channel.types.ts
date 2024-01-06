@@ -12,7 +12,6 @@ import { ISubscribeArgs } from './customEvents.types';
 import { IParticipants } from './participants.types';
 
 export interface IChannel extends IParticipants {
-    messages: any[],
     join: () => void,
     subscribe: () => void,
     publishMessage: (args:IPublishMessageArgs) => void,
