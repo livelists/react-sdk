@@ -5,7 +5,7 @@ import {
     ILoadMoreMessagesArgs,
     CustomEvent,
     WSConnector,
-    IInitialInfoUpdated,
+    IInitialInfoUpdated, ScrollToBottomReasons,
 } from 'livelists-js-core';
 
 import { ISubscribeArgs } from './customEvents.types';
@@ -23,12 +23,17 @@ export interface IChannel extends IParticipants {
     loadMoreMessages: (args:ILoadMoreMessagesArgs) => void,
     onSubscribeEvent: (args:ISubscribeArgs) => void,
     unSubscribeEvent: (args:ISubscribeArgs) => void,
-    scrollToBottomKey: number,
+    scrollToBottomKey: IScrollToBottomKey,
     readMessage: (args:IReadMessageArgs) => void,
     notSeenCount: number,
     initialScroll: IInitialScroll,
     onFindFirstNotSeen: (args:IFindNotSeenArgs) => void,
     channelInfo: IInitialInfoUpdated['data'] | undefined,
+}
+
+export interface IScrollToBottomKey {
+    reason: ScrollToBottomReasons | undefined,
+    key: number,
 }
 
 export interface IChannelArgs {

@@ -29,7 +29,7 @@ import {
     IFindNotSeenArgs,
     IInitialScroll,
     IPublishMessageArgs,
-    IReadMessageArgs,
+    IReadMessageArgs, IScrollToBottomKey,
 } from '../types/channel.types';
 import { useCustomEvents } from './useCustomEvents';
 import { useParticipants } from './useParticipants';
@@ -48,7 +48,10 @@ export const useChannel = ({
     const [historyMessages, setHistoryMessages] = useState<LocalMessage[]>([]);
     const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionStates.Disconnected);
     const [isLoadingHistory, setIsLoadingMore] = useState<boolean>(false);
-    const [scrollToBottomKey, setScrollToBottomKey] = useState<number>(0);
+    const [scrollToBottomKey, setScrollToBottomKey] = useState<IScrollToBottomKey>({
+        reason: undefined,
+        key: 0,
+    });
     const [notSeenCount, setNotSeenCount, ] = useState<{
         count: number,
         isInit: boolean,
@@ -112,8 +115,13 @@ export const useChannel = ({
         } as IOnEvent<ChannelEvents.InitialInfoUpdated, IInitialInfoUpdated['data']>);
         channelRef.current?.on({
             event: ChannelEvents.ShouldScrollToBottom,
-            cb: () => {
-                setScrollToBottomKey(c => c + 1);
+            cb: ({
+                reason,
+            }) => {
+                setScrollToBottomKey(c => ({
+                    key: c.key + 1,
+                    reason,
+                }));
             }
         } as IOnEvent<ChannelEvents.ShouldScrollToBottom, IShouldScrollToBottom['data']>);
         channelRef.current?.notSeenCounter.on({

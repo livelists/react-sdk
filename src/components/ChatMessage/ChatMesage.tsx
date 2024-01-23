@@ -8,6 +8,7 @@ import { LocalMessage, MessageType } from 'livelists-js-core';
 import { SystemMessageBlock } from '../../atoms/SystemMessageBlock';
 import { Text } from '../../atoms/Text';
 import { getDayTime } from '../../utils/date/getDayTime';
+import { getUserNameFromUser } from '../../utils/string/getUserNameFromUser';
 import { Avatar } from '../Avatar';
 import { SystemMessage } from '../SystemMessage';
 import { UnreadLabel } from './UnreadLabel';
@@ -107,23 +108,27 @@ const ChatMessage:React.FC<IProps> = ({
             >
                 {!isMy && (
                     <Avatar
-                        identifier={sender?.identifier?.[0]}
+                        identifier={getUserNameFromUser({
+                            identifier: sender?.identifier?.[0] || '',
+                            customData: sender?.customData,
+                        })}
                     />
                 )}
                 <div css={message({ isMy })}>
                     <div css={messageCloud({ isMy })}>
-                        {sender?.customData?.data?.username && (
-                            <Text
-                                customCss={`
+                        <Text
+                            customCss={`
                                 font-weight: 500;
                                 font-size: 16px;
                                 color: #444444;
                                 order: ${isMy ? 1 : 0}
                             `}
-                            >
-                                {sender.customData.data.username}
-                            </Text>
-                        )}
+                        >
+                            {getUserNameFromUser({
+                                identifier: sender?.identifier || '',
+                                customData: sender?.customData,
+                            })}
+                        </Text>
                         <Text
                             customCss={`
                             font-size: 16px;
