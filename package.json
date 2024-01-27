@@ -1,6 +1,6 @@
 {
   "name": "livelists-react-sdk",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "LiveLists components for React.js",
   "main": "./dist/index.js",
   "scripts": {
@@ -44,7 +44,7 @@
   "homepage": "https://github.com/livelists/react-sdk#readme",
   "dependencies": {
     "@emotion/react": "11.11.1",
-    "livelists-js-core": "0.3.0",
+    "livelists-js-core": "0.3.2",
     "raf": "3.4.1"
   }
 }
