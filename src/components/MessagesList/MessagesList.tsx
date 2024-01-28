@@ -139,12 +139,15 @@ const MessagesList:React.FC<IProps> = ({
         if (scrollToBottomKey?.reason) {
             const initialOffset = handleGetOffsetFromBottom();
             timeOutRef.current = setTimeout((reason, offset) => {
+                console.log('timeOutFired', Date.now());
                 if (reason === ScrollToBottomReasons.MePublishMessage) {
+                    console.log('mePublish');
                     scrollRef.current?.scrollToBottom();
                 } else if (offset < PREVENT_AUTO_SCROLL_TO_BOTTOM_MARGIN) {
+                    console.log('offset');
                     scrollRef.current?.scrollToBottom();
                 }
-            }, 10, scrollToBottomKey?.reason, initialOffset);
+            }, 200, scrollToBottomKey?.reason, initialOffset);
         }
     }, [scrollToBottomKey?.key]);
 
